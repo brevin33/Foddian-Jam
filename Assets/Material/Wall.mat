@@ -36,6 +36,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Pattern:
+        m_Texture: {fileID: 2800000, guid: 491c99526e012824fa0db7c24e98781d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -51,13 +55,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _Hit_Time: 9.0476
-    - _Hit_Time_2: 8.6276
+    - _Hit_Time: 70.758995
+    - _Hit_Time_2: 44.493797
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _Hit_Color: {r: 1, g: 1, b: 1, a: 0}
-    - _Hit_Point: {r: 0.63916826, g: -3.5417476, b: 0, a: 0}
-    - _Hit_Point_2: {r: -2.5981448, g: -0.6080487, b: 0, a: 0}
+    - _Hit_Point: {r: 64.905106, g: -4.0903835, b: 0, a: 0}
+    - _Hit_Point_2: {r: 15.055733, g: -3.5561633, b: 0, a: 0}
+    - _Pattern_Color: {r: 0.3679245, g: 0.3679245, b: 0.3679245, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

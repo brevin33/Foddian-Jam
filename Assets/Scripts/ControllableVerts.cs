@@ -27,6 +27,8 @@ public class ControllableVerts : MonoBehaviour
     float lerpValue;
     bool returning = false;
 
+    CamerMovement camerMovement;
+
     Vector2 mousePos;
     Vector2 prevMousePos;
     Vector2 prevMovingVertPos;
@@ -63,6 +65,7 @@ public class ControllableVerts : MonoBehaviour
     private void Awake()
     {
         mainCamera = Camera.main;
+        camerMovement = mainCamera.gameObject.GetComponent<CamerMovement>();
         meshFilter = GetComponent<MeshFilter>();
         Mesh mesh = meshFilter.mesh;
         basePos = mesh.vertices;
@@ -72,13 +75,16 @@ public class ControllableVerts : MonoBehaviour
         power[2] = Vector2.zero;
         power[3] = Vector2.zero;
         power[4] = Vector2.zero;
-        maxDist = maxMoveDist * transform.localScale.x;
+        maxDist = maxMoveDist * ((transform.localScale.x + transform.localScale.y)*.5f);
         edgeColliders = GetComponentsInChildren<EdgeCollider2D>();
         fourthEdgeIndexs = new int[2];
         fourthEdgeIndexs[0] = 3;
         fourthEdgeIndexs[0] = 0;
         mousePos = Vector2.one * 9999;
         clickPos = Vector2.one * 9999;
+        Bounds b = mesh.bounds;
+        b.Expand(10.8f);
+        mesh.bounds = b;
     }
 
     private void Update()
@@ -230,6 +236,7 @@ public class ControllableVerts : MonoBehaviour
         edgeColliders[3].SetPoints(new List<Vector2> { verts[3], verts[2] });
         edgeColliders[4].SetPoints(new List<Vector2> { verts[fourthEdgeIndexs[0]], verts[fourthEdgeIndexs[1]] });
         justclicked = false;
+        camerMovement.freeze = movedVert;
     }
 
     IEnumerator goBack()
@@ -252,7 +259,7 @@ public class ControllableVerts : MonoBehaviour
     }
     bool goingBack()
     {
-        lerpValue += Time.deltaTime * 6f;
+        lerpValue += Time.deltaTime * 4f;
         return lerpValue >= 1;
     }
 
