@@ -24,6 +24,9 @@ public class ball : MonoBehaviour
     float smallDelay;
 
     float remainingJumps;
+
+    [SerializeField]
+    LayerMask notPlayer;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -58,6 +61,7 @@ public class ball : MonoBehaviour
             shootBall();
         }
     }
+
 
     private void drawPowerLine()
     {
@@ -96,7 +100,12 @@ public class ball : MonoBehaviour
         rb.AddForce(hitLine * hitPower);
         hitting = false;
         remainingJumps -= 1;
+        if(Physics2D.Raycast(transform.position, Vector2.down, 2f,notPlayer) || Physics2D.Raycast(transform.position + (Vector3.left * .5f), Vector2.down, 2f, notPlayer) || Physics2D.Raycast(transform.position + (Vector3.right*.5f), Vector2.down, 2f, notPlayer))
+        {
+            remainingJumps = jumps;
+        }
         lineRenderer.enabled = false;
+
     }
 
 

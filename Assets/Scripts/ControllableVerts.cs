@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class ControllableVerts : MonoBehaviour
 {
@@ -111,7 +112,6 @@ public class ControllableVerts : MonoBehaviour
 
     private void FixedUpdate()
     {
-        movedVert = false;
         if (!returning)
         {
             if (trackingMousePos)
@@ -124,7 +124,6 @@ public class ControllableVerts : MonoBehaviour
                 }
             }
         }
-        movedVert = false;
         Mesh mesh = meshFilter.mesh;
         Vector3[] verts = mesh.vertices;
         for (int i = 0; i < mesh.vertexCount; i++)
@@ -153,16 +152,17 @@ public class ControllableVerts : MonoBehaviour
                         mesh.triangles = new int[] { 0, 3, 1, 3, 0, 2 };
                     }
                 }
-                movedVert = true;
                 prevMovingVertPos = vert;
                 if (clicked)
                 {
+                    movedVert = true;
                     v1 += (Vector2)(transform.InverseTransformPoint(mousePos) - transform.InverseTransformPoint(prevMousePos));
                     vert = Vector2.MoveTowards(vert, v1, maxSpeed * Time.fixedDeltaTime);
+                    edgeFinalVertPos1 = vert;
                 }
                 else
                 {
-                    vert = Vector2.Lerp(transform.InverseTransformPoint(mousePos), baseVert, lerpValue);
+                    vert = Vector2.Lerp(edgeFinalVertPos1, baseVert, lerpValue);
                 }
                 movingVertPos = vert;
                 if (!returning)
@@ -196,9 +196,9 @@ public class ControllableVerts : MonoBehaviour
                 v2 = vert2;
             }
             prevMovingVertPos = vert1;
-            movedVert = true;
             if (clicked)
             {
+                movedVert = true;
                 v1 += (Vector2)(transform.InverseTransformPoint(mousePos) - transform.InverseTransformPoint(prevMousePos));
                 v2 += (Vector2)(transform.InverseTransformPoint(mousePos) - transform.InverseTransformPoint(prevMousePos));
                 vert1 = Vector2.MoveTowards(vert1, v1, maxSpeed * Time.fixedDeltaTime);
@@ -241,6 +241,7 @@ public class ControllableVerts : MonoBehaviour
 
     IEnumerator goBack()
     {
+        movedVert = false;
         returning = true;
         lerpValue = 0;
         yield return new WaitUntil(goingBack);
