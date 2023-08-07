@@ -1,9 +1,9 @@
-using System.Security.Cryptography;
-using UnityEditor.UIElements;
 using UnityEngine;
 
 public class ball : MonoBehaviour
 {
+    [SerializeField]
+    Slowmo slowmo;
     Rigidbody2D rb;
     Vector2 mousePos;
     Vector2 startMousePos;
@@ -18,6 +18,9 @@ public class ball : MonoBehaviour
     float hitPower;
     [SerializeField]
     Material wallMat;
+
+    [SerializeField]
+    AudioSource hitBall;
 
     bool hitting;
 
@@ -44,17 +47,18 @@ public class ball : MonoBehaviour
 
     private void LateUpdate()
     {
+        timeLastSoundEffect += Time.deltaTime;
         if (Input.GetMouseButtonDown(0))
         {
             startMousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             clicked = true;
         }
-        else if (!ControllableVerts.movedVert && Input.GetMouseButton(0))
+        else if (!ControllableVerts.movedVert && Input.GetMouseButton(0) && slowmo.slow)
         {
             mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             drawPowerLine();
         }
-        else if (Input.GetMouseButtonUp(0) && hitting)
+        else if (!ControllableVerts.movedVert  && (Input.GetMouseButtonUp(0) && hitting))
         {
             smallDelay = 0;
             mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -105,9 +109,10 @@ public class ball : MonoBehaviour
             remainingJumps = jumps;
         }
         lineRenderer.enabled = false;
-
+        hitBall.Play();
     }
 
+    float timeLastSoundEffect;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -131,16 +136,18 @@ public class ball : MonoBehaviour
         GameObject other = collision.gameObject;
         if (other.tag == "movingVert")
         {
-            ControllableVerts mv = other.GetComponentInParent<ControllableVerts>();
+            Debug.Log("here");
+            mv = other.GetComponentInParent<ControllableVerts>();
             int[] edgeIndex = other.GetComponent<Edge>().index;
             float distfromVert1 = Vector2.Distance(mv.getVertexPosition(edgeIndex[0]), contacts[0].point);
             float distfromVert2 = Vector2.Distance(mv.getVertexPosition(edgeIndex[1]), contacts[0].point);
             float lerpValue = distfromVert1 / (distfromVert1 + distfromVert2);
             Vector2 power = Vector2.Lerp(mv.power[edgeIndex[0]], mv.power[edgeIndex[1]], lerpValue);
-            rb.AddForce(avgNormal.normalized * power.magnitude * Mathf.Max(Vector3.Dot(power.normalized, avgNormal), 0));
+            force = (avgNormal.normalized * power.magnitude * Mathf.Max(Vector3.Dot(power.normalized, avgNormal), 0));
         }
     }
 
+    Vector2 force;
     private void OnCollisionStay2D(Collision2D collision)
     {
         Vector2 avgNormal = Vector3.zero;
@@ -163,13 +170,31 @@ public class ball : MonoBehaviour
         GameObject other = collision.gameObject;
         if (other.tag == "movingVert")
         {
-            ControllableVerts mv = other.GetComponentInParent<ControllableVerts>();
+            mv = other.GetComponentInParent<ControllableVerts>();
             int[] edgeIndex = other.GetComponent<Edge>().index;
             float distfromVert1 = Vector2.Distance( mv.getVertexPosition(edgeIndex[0]), contacts[0].point);
             float distfromVert2 = Vector2.Distance(mv.getVertexPosition(edgeIndex[1]), contacts[0].point);
             float lerpValue = distfromVert1/(distfromVert1+distfromVert2);
             Vector2 power = Vector2.Lerp(mv.power[edgeIndex[0]], mv.power[edgeIndex[1]],lerpValue);
-            rb.AddForce(avgNormal.normalized * power.magnitude * Mathf.Max(Vector3.Dot(power.normalized, avgNormal), 0));
+            Vector2 testForce = (avgNormal.normalized * power.magnitude * Mathf.Max(Vector3.Dot(power.normalized, avgNormal), 0));
+            force = testForce.magnitude > force.magnitude ? testForce : force;
+        }
+    }
+
+    ControllableVerts mv;
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        GameObject other = collision.gameObject;
+        if (other.tag == "movingVert")
+        {
+            mv = other.GetComponentInParent<ControllableVerts>();
+            mv.undoClick = true;
+            mv = null;
+            slowmo.freezeTime(false);
+            rb.AddForce(force);
+            Debug.Log(force);
+            force = Vector2.zero;
         }
     }
 }

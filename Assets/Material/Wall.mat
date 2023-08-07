@@ -55,14 +55,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _Hit_Time: 20.751799
-    - _Hit_Time_2: 22.0938
+    - _Hit_Time: 28.122599
+    - _Hit_Time_2: 15.486199
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _Hit_Color: {r: 1, g: 1, b: 1, a: 0}
-    - _Hit_Point: {r: 19.104385, g: 33.50707, b: 0, a: 0}
-    - _Hit_Point_2: {r: 22.693104, g: 33.589878, b: 0, a: 0}
+    - _Hit_Point: {r: 68.056984, g: 57.81231, b: 0, a: 0}
+    - _Hit_Point_2: {r: 47.890095, g: 8.959599, b: 0, a: 0}
     - _Pattern_Color: {r: 0.3679245, g: 0.3679245, b: 0.3679245, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

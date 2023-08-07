@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class ControllableVerts : MonoBehaviour
 {
@@ -35,7 +34,8 @@ public class ControllableVerts : MonoBehaviour
     Vector2 prevMovingVertPos;
     Vector2 movingVertPos;
     Vector2 clickPos;
-    bool clicked;
+    public bool clicked { get; set; }
+
     public static bool movedVert;
 
     MeshFilter meshFilter;
@@ -46,6 +46,9 @@ public class ControllableVerts : MonoBehaviour
 
     public Vector2[] power { get; set; }
 
+    public bool undoClick { get; set; }
+
+
     float maxDist;
 
     bool justclicked;
@@ -54,7 +57,7 @@ public class ControllableVerts : MonoBehaviour
 
     int[] vertsOfClickedEdge;
 
-    bool edgeClicked;
+    public bool edgeClicked { get; set;}
 
     Vector2 edgeFinalVertPos1;
     Vector2 edgeFinalVertPos2;
@@ -83,6 +86,7 @@ public class ControllableVerts : MonoBehaviour
         fourthEdgeIndexs[0] = 0;
         mousePos = Vector2.one * 9999;
         clickPos = Vector2.one * 9999;
+        undoClick = false;
         Bounds b = mesh.bounds;
         b.Expand(10.8f);
         mesh.bounds = b;
@@ -100,9 +104,11 @@ public class ControllableVerts : MonoBehaviour
                 clicked = true;
                 trackingMousePos = true;
                 justclicked = true;
+                undoClick = false;
             }
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) || undoClick)
             {
+                undoClick = false;
                 clicked = false;
                 trackingMousePos = false;
                 StartCoroutine(goBack());

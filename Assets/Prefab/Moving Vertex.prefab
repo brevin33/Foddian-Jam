@@ -664,7 +664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb2b39ee45c65449989116d106cbd9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 8.7
+  strength: 20
   middleEdge: {fileID: 4731060193777404173}
   maxMoveDist: 0.98
   maxSpeed: 30
