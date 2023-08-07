@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class MenuController : MonoBehaviour
@@ -10,6 +11,7 @@ public class MenuController : MonoBehaviour
     [SerializeField]
     Slowmo s;
 
+    public static bool won = false;
 
     bool activePauseMenu = false;
     private void Update()
@@ -18,7 +20,10 @@ public class MenuController : MonoBehaviour
         {
             activePauseMenu = !activePauseMenu;
             pauseMenu.SetActive(activePauseMenu);
-            s.freezeTime(activePauseMenu);
+            if (!won)
+            {
+                s.freezeTime(activePauseMenu);
+            }
         }
     }
 }

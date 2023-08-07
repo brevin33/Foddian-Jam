@@ -1,3 +1,4 @@
+using LootLocker.Requests;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,12 @@ public class Slowmo : MonoBehaviour
             Time.timeScale = 1;
             Time.fixedDeltaTime = baseFixedDeltaTime;
         }
+    }
+
+    public void setDefault()
+    {
+        Time.timeScale = 1;
+        Time.fixedDeltaTime = baseFixedDeltaTime;
     }
 
     public void freezeTime(bool f)

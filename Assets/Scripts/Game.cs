@@ -20,20 +20,5 @@ public class Game : MonoBehaviour
 
             Debug.Log("successfully started LootLocker session");
         });
-        leaderBoard.setPlayer("20");
-    }
-
-
-    private void Update()
-    {
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            leaderBoard.showLeaderBoardText();
-        }
-        if (Input.GetMouseButtonDown(2))
-        {
-            leaderBoard.submitScore();
-        }
     }
 }

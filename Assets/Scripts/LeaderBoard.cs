@@ -15,6 +15,9 @@ public class LeaderBoard : MonoBehaviour
     [SerializeField]
     GameObject board;
 
+    [SerializeField]
+    End end;
+
     LootLockerLeaderboardMember[] top5;
 
     LootLockerLeaderboardMember[] surroundingPlacements;
@@ -84,18 +87,19 @@ public class LeaderBoard : MonoBehaviour
         StartCoroutine(changeText());
     }
 
-    public void submitScore()
+    public void submitScore(int score)
     {
         int leaderboardID = 16662;
-        int score = 1000;
         LootLockerSDKManager.SubmitScore(memberID, score, leaderboardID, (response) =>
         {
             if (response.statusCode == 200)
             {
+                end.nameSubmited = true;
                 Debug.Log("Successful");
             }
             else
             {
+                end.nameSubmited = true;
                 Debug.Log("failed: " + response.Error);
             }
         });
